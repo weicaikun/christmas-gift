@@ -73,7 +73,7 @@
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); z-index: 3000;
             justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 3s ease;
+            opacity: 0; transition: opacity 0.5s ease;
         }
         .photo-viewer.show { display: flex; opacity: 1; }
         .photo-viewer.fade-out { opacity: 0; }
@@ -254,7 +254,8 @@
 
     <!-- 背景音乐 -->
     <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        <source src="" type="audio/ogg">
+        <source src="" type="audio/mpeg">
     </audio>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -290,7 +291,7 @@ const CONFIG = {
             desc: "恭喜你抽中 愿望卡 一张！<br><br>可以许一个愿望让我帮你实现~<br>（在我能力范围内哦）",
         }
     ],
-    musicUrl: "https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Christmas_Rap/Kevin_MacLeod_-_Jingle_Bells_Calm.mp3"
+    musicUrl: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Jingle_Bells_Instrumental.ogg"
 };
 
 // 抽奖状态
@@ -1171,12 +1172,7 @@ function openPhotoViewer(index) {
     updatePhotoViewer();
     document.getElementById('photoViewer').classList.add('show');
     controls.autoRotate = false;
-
-    // 2秒后自动关闭
-    clearTimeout(photoAutoCloseTimer);
-    photoAutoCloseTimer = setTimeout(() => {
-        closePhotoViewer();
-    }, 2000);
+    // 不再自动关闭，由用户手动关闭
 }
 
 function updatePhotoViewer() {
@@ -1207,25 +1203,14 @@ function goToPhoto(index) {
 function prevPhoto() {
     currentPhotoIndex = (currentPhotoIndex - 1 + CONFIG.photos.length) % CONFIG.photos.length;
     updatePhotoViewer();
-    // 重置自动关闭计时器
-    clearTimeout(photoAutoCloseTimer);
-    photoAutoCloseTimer = setTimeout(() => {
-        closePhotoViewer();
-    }, 2000);
 }
 
 function nextPhoto() {
     currentPhotoIndex = (currentPhotoIndex + 1) % CONFIG.photos.length;
     updatePhotoViewer();
-    // 重置自动关闭计时器
-    clearTimeout(photoAutoCloseTimer);
-    photoAutoCloseTimer = setTimeout(() => {
-        closePhotoViewer();
-    }, 2000);
 }
 
 function closePhotoViewer() {
-    clearTimeout(photoAutoCloseTimer);
     const viewer = document.getElementById('photoViewer');
     viewer.classList.add('fade-out');
 
@@ -1235,7 +1220,7 @@ function closePhotoViewer() {
     setTimeout(() => {
         viewer.classList.remove('show', 'fade-out');
         controls.autoRotate = true;
-    }, 3000); // 等待3秒淡出动画完成
+    }, 500); // 0.5秒淡出
 }
 
 // ==================== 礼物弹窗 ====================
